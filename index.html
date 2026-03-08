@@ -4,6 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Arena Web Dev App</title>
+    <script>
+      function resizeIframe() {
+        const height = Math.max(
+          document.body.scrollHeight,
+          document.body.offsetHeight,
+          document.documentElement.scrollHeight,
+          document.documentElement.offsetHeight
+        );
+        // Tenta redimensionar o iframe pai de todas as formas possíveis
+        try { window.frameElement.style.height = height + 'px'; } catch(e) {}
+        try { window.frameElement.height = height; } catch(e) {}
+        try { window.parent.document.querySelector('iframe').style.height = height + 'px'; } catch(e) {}
+        window.parent.postMessage({ frameHeight: height }, '*');
+        window.parent.postMessage({ type: 'setHeight', height: height }, '*');
+      }
+    </script>
     <link
       rel="preconnect"
       href="https://fonts.googleapis.com"
@@ -42,18 +58,50 @@
         box-sizing: border-box;
       }
 
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
+      html {
+        height: 100% !important;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      html::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        background: transparent;
       }
 
       body {
+        height: auto !important;
         margin: 0;
         padding: 16px;
         background: transparent;
         font-family: "Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      body::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        background: transparent;
+      }
+
+      /* Garante que o grid ocupa todo espaço necessário */
+      .catalogo-produtos {
+        height: auto !important;
+        overflow: visible !important;
+      }
+
+      .produto-card {
+        height: auto !important;
+        overflow: visible !important;
       }
 
       code {
@@ -63,12 +111,13 @@
       }
 
       .wrap {
-        width: min(1120px, calc(100% - 40px));
+        width: 100%;
         margin-inline: auto;
+        box-sizing: border-box;
       }
 
       .pagina {
-        min-height: 100vh;
+        height: auto;
         display: flex;
         flex-direction: column;
       }
@@ -1321,7 +1370,7 @@
         modalEl.style.animation = "";
 
         // Trava scroll
-        document.documentElement.style.overflow = "hidden";
+        /* document.documentElement.style.overflow = 'hidden'; */
 
         // Foco no botão fechar
         setTimeout(function () {
@@ -1340,7 +1389,7 @@
         videoIframe.src = "";
 
         overlayEl.classList.add("hidden");
-        document.documentElement.style.overflow = "";
+        /* document.documentElement.style.overflow = ''; */
       }
 
       // ---- TROCA IMAGEM ATIVA ----
@@ -1390,6 +1439,18 @@
 
       // ---- INICIALIZA ----
       renderCatalogo();
+
+      // Reporta altura DEPOIS dos cards renderizarem
+      setTimeout(resizeIframe, 200);
+      setTimeout(resizeIframe, 600);
+      setTimeout(resizeIframe, 1200);
+      setTimeout(resizeIframe, 2500);
+      setTimeout(resizeIframe, 4000);
+      window.addEventListener("resize", resizeIframe);
+      window.addEventListener("load", resizeIframe);
+      new MutationObserver(function() {
+        setTimeout(resizeIframe, 200);
+      }).observe(document.body, { childList: true, subtree: true });
     </script>
   </body>
 </html>

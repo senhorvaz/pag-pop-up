@@ -1,0 +1,1395 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arena Web Dev App</title>
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* =============================================
+         CSS GLOBAL + CATALOGO + POPUP
+         ============================================= */
+
+      :root {
+        --bg0: #0b0f14;
+        --bg1: #0e1520;
+        --card: rgba(255, 255, 255, 0.06);
+        --card2: rgba(255, 255, 255, 0.08);
+        --stroke: rgba(255, 255, 255, 0.12);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.66);
+        --muted2: rgba(255, 255, 255, 0.48);
+        --accent: #f4d35e;
+        --accent2: #e85d75;
+        --shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        margin: 0;
+        padding: 16px;
+        background: transparent;
+        font-family: "Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      }
+
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 0.95em;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .wrap {
+        width: min(1120px, calc(100% - 40px));
+        margin-inline: auto;
+      }
+
+      .pagina {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* =====================
+         HEADER
+         ===================== */
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(14px);
+        background: rgba(11, 15, 20, 0.72);
+        border-bottom: 1px solid var(--stroke);
+      }
+
+      .site-header .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 0;
+        gap: 16px;
+      }
+
+      .marca {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .marca-selo {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, rgba(244, 211, 94, 0.95), rgba(232, 93, 117, 0.92));
+        color: rgba(0, 0, 0, 0.85);
+        font-family: "Fraunces", serif;
+        font-weight: 700;
+        font-size: 18px;
+      }
+
+      .marca-nome {
+        margin: 0;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+
+      .marca-sub {
+        margin: 2px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .top-nav {
+        display: flex;
+        gap: 14px;
+      }
+
+      .top-nav a {
+        color: var(--muted);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        padding: 10px 10px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        transition: transform 200ms ease, border-color 200ms ease, background 200ms ease;
+      }
+
+      .top-nav a:hover {
+        color: var(--text);
+        border-color: var(--stroke);
+        background: rgba(255, 255, 255, 0.04);
+        transform: translateY(-1px);
+      }
+
+      /* =====================
+         MAIN CONTENT
+         ===================== */
+      .conteudo {
+        flex: 1;
+        padding: 22px 0 52px;
+      }
+
+      .hero {
+        padding: 24px 0 18px;
+      }
+
+      .hero h1 {
+        font-family: "Fraunces", serif;
+        font-size: clamp(28px, 3.5vw, 44px);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        margin: 0;
+      }
+
+      .hero p {
+        margin: 14px 0 0;
+        color: var(--muted);
+        max-width: 72ch;
+      }
+
+      .catalogo-cabecalho {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 14px;
+        margin-top: 12px;
+        margin-bottom: 14px;
+      }
+
+      .catalogo-cabecalho h2 {
+        font-family: "Fraunces", serif;
+        margin: 0;
+        font-size: 22px;
+        letter-spacing: -0.01em;
+      }
+
+      .catalogo-cabecalho p {
+        margin: 0;
+        color: var(--muted2);
+        font-size: 14px;
+      }
+
+      /* =====================
+         DESTAQUES HEADER + BARRA DE PESQUISA
+         ===================== */
+      .destaques-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 60px;
+        flex-wrap: nowrap;
+      }
+
+      .destaques-titulo {
+        font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+        font-size: 22px;
+        font-weight: 900;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #111111;
+        margin: 0;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .search-wrap {
+        position: relative;
+        width: 280px;
+        flex-shrink: 0;
+      }
+
+      @media (max-width: 480px) {
+        .destaques-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+          margin-bottom: 48px;
+        }
+
+        .destaques-titulo {
+          font-size: 20px;
+        }
+
+        .search-wrap {
+          width: 100%;
+        }
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 9px 14px 9px 38px;
+        border-radius: 6px;
+        border: 2px solid #cccccc;
+        background: transparent;
+        color: #111111;
+        font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+        font-size: 13px;
+        outline: none;
+        transition: border-color 200ms ease;
+      }
+
+      .search-input::placeholder {
+        color: rgba(255,255,255,0.35);
+      }
+
+      .search-input:focus {
+        border-color: #aaaaaa;
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 11px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #aaaaaa;
+        pointer-events: none;
+        font-size: 14px;
+      }
+
+      /* Mensagem de vazio */
+      .search-vazio {
+        display: none;
+        padding: 48px 20px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 15px;
+      }
+
+      .search-vazio.visivel {
+        display: block;
+      }
+
+      /* =====================
+         GRID DO CATALOGO
+         Requisito: 6 / 3 / 2
+         ===================== */
+      /* Celular: 2 colunas */
+      .catalogo-produtos {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+      }
+
+      /* Tablet: 3 colunas */
+      @media (min-width: 740px) {
+        .catalogo-produtos {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 36px;
+        }
+      }
+
+      /* Computador: 6 colunas */
+      @media (min-width: 1100px) {
+        .catalogo-produtos {
+          grid-template-columns: repeat(6, minmax(0, 1fr));
+          gap: 40px;
+        }
+      }
+
+      .produto-card {
+        animation: cardIn 520ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+      }
+
+      @keyframes cardIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ---- CARD VERTICAL (estilo Lotofácil) — apenas imagem ---- */
+      .produto-botao {
+        width: 100%;
+        padding: 0;
+        border: 3px solid #7b2fbf;
+        border-radius: 18px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 6px 24px rgba(123, 47, 191, 0.20), 0 2px 8px rgba(0,0,0,0.10);
+        cursor: pointer;
+        transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+        display: block;
+      }
+
+      .produto-botao:hover {
+        transform: translateY(-4px) scale(1.025);
+        border-color: #a050f0;
+        box-shadow: 0 18px 52px rgba(123, 47, 191, 0.35), 0 4px 16px rgba(0,0,0,0.14);
+      }
+
+      /* Imagem ocupa 100% do card — proporção 3/4, todos iguais */
+      .produto-media {
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        overflow: hidden;
+        background: #f3eaff;
+        display: block;
+      }
+
+      .produto-imagem {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        transition: transform 380ms ease;
+      }
+
+      .produto-botao:hover .produto-imagem {
+        transform: scale(1.06);
+      }
+
+      /* Info section hidden — card é só imagem */
+      .produto-info { display: none; }
+      .produto-categoria,
+      .produto-titulo,
+      .produto-precos,
+      .produto-preco,
+      .produto-preco-antigo,
+      .produto-cta { display: none; }
+
+      .como-editar {
+        margin-top: 28px;
+        padding: 18px;
+        border: 1px solid var(--stroke);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .como-editar h2 {
+        font-family: "Fraunces", serif;
+        margin: 0 0 8px;
+      }
+
+      .como-editar ul {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--muted);
+      }
+
+      /* =====================
+         FOOTER
+         ===================== */
+      .site-footer {
+        border-top: 1px solid var(--stroke);
+        padding: 18px 0;
+        color: var(--muted2);
+      }
+
+      /* =====================
+         POPUP MODAL GLOBAL
+         ===================== */
+      .popup-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: grid;
+        place-items: start center;
+        padding: 24px 14px;
+        z-index: 50;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: none;
+        animation: overlayIn 180ms ease-out both;
+      }
+      .popup-overlay::-webkit-scrollbar { display: none; }
+
+      .popup-overlay.hidden {
+        display: none;
+      }
+
+      @keyframes overlayIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .popup-modal {
+        width: min(1040px, 100%);
+        overflow: visible;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background:
+          radial-gradient(900px 700px at 20% 0%, rgba(244, 211, 94, 0.12), transparent 50%),
+          radial-gradient(900px 700px at 90% 20%, rgba(232, 93, 117, 0.12), transparent 55%),
+          rgba(12, 16, 22, 0.92);
+        box-shadow: var(--shadow);
+        transform-origin: 50% 100%;
+        animation: modalIn 240ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+      }
+
+      @keyframes modalIn {
+        from {
+          opacity: 0;
+          transform: translateY(18px) scale(0.985);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .popup-topo {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 14px 14px 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .popup-topo-textos {
+        min-width: 0;
+      }
+
+      .popup-titulo-linha {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 6px;
+      }
+
+      .popup-titulo {
+        font-family: "Fraunces", serif;
+        margin: 0;
+        font-size: 20px;
+        line-height: 1.1;
+        color: var(--text);
+      }
+
+      .popup-ref {
+        font-size: 13px;
+        color: rgba(255,255,255,0.45);
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .popup-fechar {
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.9);
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        font-size: 24px;
+        line-height: 1;
+        transition: transform 200ms ease, background 200ms ease, border-color 200ms ease;
+        flex-shrink: 0;
+      }
+
+      .popup-fechar:hover {
+        transform: rotate(5deg);
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(244, 211, 94, 0.4);
+      }
+
+      .popup-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        overflow: visible;
+      }
+
+      .popup-col-esquerda,
+      .popup-col-direita {
+        padding: 14px;
+      }
+
+      .popup-media {
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(0, 0, 0, 0.28);
+      }
+
+      .popup-imagem-principal {
+        width: 100%;
+        height: auto;
+        display: block;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+      }
+
+      .popup-miniaturas {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .popup-miniatura {
+        padding: 0;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        cursor: pointer;
+        transition: transform 180ms ease, border-color 180ms ease;
+      }
+
+      .popup-miniatura img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+      }
+
+      .popup-miniatura.ativa {
+        border-color: rgba(244, 211, 94, 0.65);
+        transform: translateY(-1px);
+      }
+
+      .popup-video {
+        margin-top: 12px;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(0, 0, 0, 0.3);
+      }
+
+      .popup-video iframe {
+        width: 100%;
+        display: block;
+        border: 0;
+        aspect-ratio: 16 / 9;
+      }
+
+      .popup-precos {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        margin-top: 2px;
+      }
+
+      .popup-preco {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin: 0;
+        color: var(--text);
+      }
+
+      .popup-preco-antigo {
+        color: rgba(255, 255, 255, 0.48);
+        text-decoration: line-through;
+        margin: 0;
+      }
+
+      .popup-descricao {
+        margin: 12px 0 0;
+        color: rgba(255, 255, 255, 0.72);
+        line-height: 1.55;
+      }
+
+      .popup-beneficios {
+        margin-top: 14px;
+        padding: 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .popup-beneficios h3 {
+        margin: 0 0 8px;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: 0.01em;
+      }
+
+      .popup-acoes {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 12px;
+        margin-bottom: 14px;
+      }
+
+      .popup-mercadopago {
+        width: 100%;
+        display: block;
+        margin: 0 auto;
+        opacity: 0.9;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        padding: 8px;
+        box-sizing: border-box;
+      }
+
+      .popup-comprar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        padding: 14px 40px;
+        border-radius: 14px;
+        font-weight: bold;
+        font-size: 16px;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        color: rgba(0, 0, 0, 0.85);
+        background: linear-gradient(135deg, #f4d35e, #e85d75);
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(244, 211, 94, 0.25);
+        transition: opacity 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+        line-height: 1;
+        text-align: center;
+        letter-spacing: 0.05em;
+      }
+
+      .popup-comprar:hover {
+        opacity: 0.92;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(244, 211, 94, 0.35);
+      }
+
+      .popup-secundario {
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(255, 255, 255, 0.88);
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 1rem;
+        font-family: inherit;
+        transition: background 200ms ease, border-color 200ms ease;
+      }
+
+      .popup-secundario:hover {
+        background: rgba(255, 255, 255, 0.09);
+        border-color: rgba(255, 255, 255, 0.22);
+      }
+
+      .popup-nota {
+        margin: 12px 0 0;
+        color: rgba(255, 255, 255, 0.45);
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      /* Responsividade do popup:
+         - fullscreen no celular
+         - 2 colunas no desktop
+      */
+      @media (min-width: 980px) {
+        .popup-overlay {
+          place-items: center;
+        }
+
+        .popup-grid {
+          grid-template-columns: 1.08fr 0.92fr;
+        }
+
+        .popup-col-esquerda {
+          border-right: 1px solid rgba(255, 255, 255, 0.12);
+        }
+      }
+
+      @media (max-width: 560px) {
+        .popup-overlay {
+          padding: 0;
+        }
+
+        .popup-modal {
+          width: 100%;
+          border-radius: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- CABEÇALHO: DESTAQUES (esquerda) + BARRA DE PESQUISA (direita) -->
+    <div class="destaques-header">
+      <h2 class="destaques-titulo">DESTAQUES</h2>
+      <div class="search-wrap">
+        <span class="search-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#cccccc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg></span>
+        <input
+          type="text"
+          id="search-input"
+          class="search-input"
+          placeholder="Pesquisar..."
+          autocomplete="off"
+        />
+      </div>
+    </div>
+
+    <div class="catalogo-produtos" id="catalogo-produtos">
+      <!-- Cards gerados via JS -->
+    </div>
+
+    <!-- Mensagem de nenhum resultado -->
+    <div class="search-vazio" id="search-vazio">
+      Nenhum produto encontrado para "<span id="search-termo"></span>".
+    </div>
+
+      <!-- POPUP MODAL GLOBAL (1 unico modal reutilizavel) -->
+      <div
+        class="popup-overlay hidden"
+        id="popup-overlay"
+        role="presentation"
+      >
+        <section
+          class="popup-modal"
+          id="popup-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-label=""
+        >
+          <header class="popup-topo">
+            <div class="popup-topo-textos">
+              <div class="popup-titulo-linha">
+                <h2 class="popup-titulo" id="popup-titulo"></h2>
+              </div>
+            </div>
+            <button
+              id="popup-fechar-btn"
+              type="button"
+              class="popup-fechar"
+              aria-label="Fechar popup"
+              title="Fechar"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </header>
+
+          <div class="popup-grid">
+            <div class="popup-col-esquerda">
+              <div class="popup-media">
+                <img
+                  class="popup-imagem-principal"
+                  id="popup-img-principal"
+                  src=""
+                  alt=""
+                  loading="eager"
+                  decoding="async"
+                />
+              </div>
+              <div class="popup-miniaturas" id="popup-miniaturas" aria-label="Galeria de imagens">
+                <!-- Miniaturas geradas via JS -->
+              </div>
+              <div class="popup-video" id="popup-video-wrapper" style="display:none;" aria-label="Video do produto">
+                <iframe
+                  id="popup-video-iframe"
+                  src=""
+                  title=""
+                  loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                ></iframe>
+              </div>
+            </div>
+
+            <div class="popup-col-direita">
+              <div class="popup-precos">
+                <p class="popup-preco" id="popup-preco"></p>
+                <span class="popup-ref" id="popup-ref-preco"></span>
+              </div>
+              <div class="popup-acoes">
+                <button class="popup-comprar" id="popup-link-compra" onclick="abrirLinkCompra()">COMPRE AGORA</button>
+                <img src="https://github.com/senhorvaz/Imagens/blob/main/mercadopago.png?raw=true" alt="Mercado Pago" class="popup-mercadopago" />
+              </div>
+              <div class="popup-beneficios" id="popup-beneficios-wrapper">
+                <h3>Descrição</h3>
+                <p id="popup-beneficios-lista" style="margin:0; color:rgba(255,255,255,0.75); line-height:1.6; font-size:14px;"></p>
+              </div>
+              <p class="popup-nota">Imagens ilustrativas. Condicoes e prazos variam conforme o checkout.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+
+    <script>
+      /* =============================
+         DADOS DO CATALOGO (EDITAVEL)
+         =============================
+         Para adicionar novos produtos:
+         1) Adicione um novo objeto no array `produtos`.
+         2) Nao e necessario duplicar HTML do card nem do popup.
+
+         Campos:
+         - titulo, categoria, preco, precoAntigo (opcional)
+         - descricao
+         - imagemPrincipal: imagem grande do produto (card + destaque no popup)
+         - miniaturas: array de URLs de imagens para alternar no popup
+         - video: URL de embed (YouTube/Vimeo) ou omitir para esconder o bloco
+         - beneficios: array de strings
+         - linkCompra: URL do checkout / pagina de compra
+      */
+      const produtos = [
+        {
+          titulo: "Lampada Aurora",
+          ref: "001",
+          categoria: "Iluminacao",
+          preco: "R$ 197,00",
+          descricao:
+            "Uma lampada de mesa com difusor em vidro leitoso e base em aluminio escovado. Luz suave, sem ofuscamento, pensada para leitura e atmosfera.",
+          imagemPrincipal:
+            "https://images.unsplash.com/photo-1513506003901-1e6a35c89aa8?auto=format&fit=crop&w=600&h=800&q=80",
+          miniaturas: [
+            "https://images.unsplash.com/photo-1513506003901-1e6a35c89aa8?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=360&q=80",
+          ],
+          video: "https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0",
+          beneficios: [
+            "Controle de intensidade (3 niveis)",
+            "Temperatura de cor quente para conforto visual",
+            "Baixo consumo com LED",
+          ],
+          linkCompra: "https://example.com/checkout/aurora",
+        },
+        {
+          titulo: "Cadeira Atlas",
+          ref: "002",
+          categoria: "Moveis",
+          preco: "R$ 849,00",
+          descricao:
+            "Cadeira com estrutura leve e encosto ergonomico. O tecido respiravel evita calor em longas jornadas de trabalho.",
+          imagemPrincipal:
+            "https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=600&h=800&q=80",
+          miniaturas: [
+            "https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1501045661006-fcebe0257c3f?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=360&q=80",
+          ],
+          video: "https://www.youtube.com/embed/ysz5S6PUM-U?rel=0",
+          beneficios: [
+            "Encosto com suporte lombar",
+            "Espuma de alta densidade",
+            "Base com rodizios silenciosos",
+          ],
+          linkCompra: "https://example.com/checkout/atlas",
+        },
+        {
+          titulo: "Kit Cafe Neblina",
+          ref: "003",
+          categoria: "Cozinha",
+          preco: "R$ 129,00",
+          descricao:
+            "Kit minimalista para preparo: coador, jarra e colher medidora. Ideal para rotinas de cafe filtrado sem bagunca.",
+          imagemPrincipal:
+            "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&h=800&q=80",
+          miniaturas: [
+            "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1507133750040-4a8f57021571?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1461988320302-91bde64fc8e4?auto=format&fit=crop&w=360&q=80",
+          ],
+          video: "https://www.youtube.com/embed/3GwjfUFyY6M?rel=0",
+          beneficios: [
+            "Materiais duraveis e faceis de limpar",
+            "Design compacto",
+            "Padrao de fluxo para extracao uniforme",
+          ],
+          linkCompra: "https://example.com/checkout/neblina",
+        },
+        {
+          titulo: "Bolsa Trajeto",
+          ref: "004",
+          categoria: "Acessorios",
+          preco: "R$ 219,00",
+          descricao:
+            "Bolsa transversal em lona premium com acabamento fosco. Compartimentos internos pensados para celular, chaves e carteira.",
+          imagemPrincipal:
+            "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=600&h=800&q=80",
+          miniaturas: [
+            "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1520975958225-f3a9b55bd1c7?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?auto=format&fit=crop&w=360&q=80",
+          ],
+          video: "https://www.youtube.com/embed/tgbNymZ7vqY?rel=0",
+          beneficios: [
+            "Alca ajustavel",
+            "Tecido resistente a respingos",
+            "Ziper reforcado",
+          ],
+          linkCompra: "https://example.com/checkout/trajeto",
+        },
+        {
+          titulo: "Fone Brisa",
+          ref: "005",
+          categoria: "Audio",
+          preco: "R$ 349,00",
+          descricao:
+            "Fone sem fio com cancelamento de ruido leve e perfil sonoro equilibrado. Feito para trabalho, estudo e viagens.",
+          imagemPrincipal:
+            "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&h=800&q=80",
+          miniaturas: [
+            "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1519677100203-a0e668c92439?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=360&q=80",
+          ],
+          video: "https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0",
+          beneficios: [
+            "Bateria ate 24h",
+            "Conexao multiponto",
+            "Microfone com reducao de ruido",
+          ],
+          linkCompra: "https://example.com/checkout/brisa",
+        },
+        {
+          titulo: "Relogio Horizonte",
+          ref: "006",
+          categoria: "Decor",
+          preco: "R$ 159,00",
+          descricao:
+            "Relogio de parede com mostrador limpo e ponteiros silenciosos. Uma peca grafica para dar ritmo ao ambiente.",
+          imagemPrincipal:
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&h=800&q=80",
+          miniaturas: [
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1505692952047-1a78307da8f2?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=360&q=80",
+          ],
+          video: "https://www.youtube.com/embed/ysz5S6PUM-U?rel=0",
+          beneficios: [
+            "Mecanismo silencioso",
+            "Facil de instalar",
+            "Acabamento fosco anti-reflexo",
+          ],
+          linkCompra: "https://example.com/checkout/horizonte",
+        },
+        {
+          titulo: "Planner Fluxo",
+          ref: "007",
+          categoria: "Papelaria",
+          preco: "R$ 79,00",
+          descricao:
+            "Planner semanal com paginas de metas e revisao. Papel encorpado para canetas e marcadores, sem vazamento.",
+          imagemPrincipal:
+            "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=600&h=800&q=80",
+          miniaturas: [
+            "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1523475496153-3d6cc68f1e0a?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=360&q=80",
+          ],
+          video: "https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0",
+          beneficios: [
+            "Visao semanal + metas",
+            "Papel 120g",
+            "Capa dura resistente",
+          ],
+          linkCompra: "https://example.com/checkout/fluxo",
+        },
+        {
+          titulo: "Garrafa Nadir",
+          ref: "008",
+          categoria: "Esporte",
+          preco: "R$ 119,00",
+          descricao:
+            "Garrafa termica com parede dupla. Mantem frio por horas e nao sua por fora. Tampa com trava para mochila.",
+          imagemPrincipal:
+            "https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=600&h=800&q=80",
+          miniaturas: [
+            "https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=360&q=80",
+          ],
+          video: "https://www.youtube.com/embed/3GwjfUFyY6M?rel=0",
+          beneficios: [
+            "Parede dupla termica",
+            "Tampa com vedacao",
+            "Acabamento antiderrapante",
+          ],
+          linkCompra: "https://example.com/checkout/nadir",
+        },
+        {
+          titulo: "Teclado Orca",
+          ref: "009",
+          categoria: "Tecnologia",
+          preco: "R$ 429,00",
+          descricao:
+            "Teclado compacto com switches suaves e amortecimento interno. Layout otimizado para produtividade sem ocupar a mesa.",
+          imagemPrincipal:
+            "https://images.unsplash.com/photo-1541140532154-b024d705b90a?auto=format&fit=crop&w=600&h=800&q=80",
+          miniaturas: [
+            "https://images.unsplash.com/photo-1541140532154-b024d705b90a?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1526378722484-bd91ca387e72?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=360&q=80",
+          ],
+          video: "https://www.youtube.com/embed/tgbNymZ7vqY?rel=0",
+          beneficios: [
+            "Perfil baixo e confortavel",
+            "Conexao USB-C",
+            "Pezinhos com duas alturas",
+          ],
+          linkCompra: "https://example.com/checkout/orca",
+        },
+        {
+          titulo: "Vaso Terracota",
+          ref: "010",
+          categoria: "Decor",
+          preco: "R$ 89,00",
+          descricao:
+            "Vaso em terracota com esmalte fosco. Combina com plantas de medio porte e traz textura para a estante.",
+          imagemPrincipal:
+            "https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=600&h=800&q=80",
+          miniaturas: [
+            "https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1453928582365-b6ad33cbcf64?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=360&q=80",
+          ],
+          video: "https://www.youtube.com/embed/ysz5S6PUM-U?rel=0",
+          beneficios: [
+            "Material natural",
+            "Acabamento resistente",
+            "Leve e estavel",
+          ],
+          linkCompra: "https://example.com/checkout/terracota",
+        },
+        {
+          titulo: "Manta Sutil",
+          ref: "011",
+          categoria: "Casa",
+          preco: "R$ 169,00",
+          descricao:
+            "Manta com toque macio e trama elegante. Perfeita para sofa, cama ou para criar um canto de leitura.",
+          imagemPrincipal:
+            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&h=800&q=80",
+          miniaturas: [
+            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1505692952047-1a78307da8f2?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=360&q=80",
+          ],
+          video: "https://www.youtube.com/embed/3GwjfUFyY6M?rel=0",
+          beneficios: [
+            "Trama respiravel",
+            "Nao pinica",
+            "Facil de lavar",
+          ],
+          linkCompra: "https://example.com/checkout/sutil",
+        },
+        {
+          titulo: "Mouse Prisma",
+          ref: "012",
+          categoria: "Tecnologia",
+          preco: "R$ 189,00",
+          descricao:
+            "Mouse ergonomico com clique silencioso e sensor preciso. Forma confortavel para uso diario e foco total.",
+          imagemPrincipal:
+            "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=600&h=800&q=80",
+          miniaturas: [
+            "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1526378722484-bd91ca387e72?auto=format&fit=crop&w=360&q=80",
+            "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=360&q=80",
+          ],
+          video: "https://www.youtube.com/embed/tgbNymZ7vqY?rel=0",
+          beneficios: [
+            "Cliques silenciosos",
+            "DPI ajustavel",
+            "Pegada ergonomica",
+          ],
+          linkCompra: "https://example.com/checkout/prisma",
+        },
+      ];
+
+      /* =============================================
+         LOGICA DO CATALOGO E POPUP
+         ============================================= */
+
+      // Estado atual do popup
+      let produtoAbertoId = null;
+      let imagemAtiva = null;
+
+      // Referências DOM
+      const catalogoEl = document.getElementById("catalogo-produtos");
+      const overlayEl = document.getElementById("popup-overlay");
+      const modalEl = document.getElementById("popup-modal");
+      const fecharBtn = document.getElementById("popup-fechar-btn");
+      const searchInput = document.getElementById("search-input");
+      const searchVazio = document.getElementById("search-vazio");
+      const searchTermo = document.getElementById("search-termo");
+
+      // ---- RENDERIZA OS CARDS ----
+      function renderCatalogo(lista) {
+        if (lista === undefined) lista = produtos;
+        catalogoEl.innerHTML = "";
+
+        if (lista.length === 0) {
+          searchVazio.classList.add("visivel");
+          return;
+        }
+        searchVazio.classList.remove("visivel");
+
+        lista.forEach(function (p, idx) {
+          // índice real no array original para o popup
+          const idxReal = produtos.indexOf(p);
+
+          const article = document.createElement("article");
+          article.className = "produto-card";
+          article.style.animationDelay = (idx * 45) + "ms";
+
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "produto-botao";
+          btn.setAttribute("aria-label", "Ver detalhes de " + p.titulo);
+          btn.addEventListener("click", function () {
+            abrirPopup(idxReal);
+          });
+
+          const mediaDiv = document.createElement("div");
+          mediaDiv.className = "produto-media";
+          const img = document.createElement("img");
+          img.src = p.imagemPrincipal;
+          img.alt = p.titulo;
+          img.loading = "lazy";
+          img.decoding = "async";
+          img.className = "produto-imagem";
+          mediaDiv.appendChild(img);
+
+          const infoDiv = document.createElement("div");
+          infoDiv.className = "produto-info";
+
+          const catP = document.createElement("p");
+          catP.className = "produto-categoria";
+          catP.textContent = p.categoria;
+
+          const tituloH3 = document.createElement("h3");
+          tituloH3.className = "produto-titulo";
+          tituloH3.textContent = p.titulo;
+
+          const precosDiv = document.createElement("div");
+          precosDiv.className = "produto-precos";
+
+          const precoSpan = document.createElement("span");
+          precoSpan.className = "produto-preco";
+          precoSpan.textContent = p.preco;
+          precosDiv.appendChild(precoSpan);
+
+          if (p.precoAntigo) {
+            const precoAntigoSpan = document.createElement("span");
+            precoAntigoSpan.className = "produto-preco-antigo";
+            precoAntigoSpan.textContent = p.precoAntigo;
+            precosDiv.appendChild(precoAntigoSpan);
+          }
+
+          const ctaSpan = document.createElement("span");
+          ctaSpan.className = "produto-cta";
+          ctaSpan.textContent = "Ver detalhes";
+
+          infoDiv.appendChild(catP);
+          infoDiv.appendChild(tituloH3);
+          infoDiv.appendChild(precosDiv);
+          infoDiv.appendChild(ctaSpan);
+
+          btn.appendChild(mediaDiv);
+          btn.appendChild(infoDiv);
+          article.appendChild(btn);
+          catalogoEl.appendChild(article);
+        });
+      }
+
+      // ---- PESQUISA ----
+      searchInput.addEventListener("input", function () {
+        const termo = searchInput.value.trim().toLowerCase();
+        if (!termo) {
+          searchTermo.textContent = "";
+          renderCatalogo(produtos);
+          return;
+        }
+        const filtrados = produtos.filter(function (p) {
+          return (
+            p.titulo.toLowerCase().includes(termo) ||
+            p.categoria.toLowerCase().includes(termo)
+          );
+        });
+        searchTermo.textContent = searchInput.value.trim();
+        renderCatalogo(filtrados);
+      });
+
+      // ---- ABRE O POPUP ----
+      function abrirPopup(produtoID) {
+        produtoAbertoId = produtoID;
+        const p = produtos[produtoID];
+        if (!p) return;
+
+        // Define imagem ativa
+        imagemAtiva = p.imagemPrincipal;
+
+        // Preenche conteúdo do popup
+        document.getElementById("popup-titulo").textContent = p.titulo;
+        document.getElementById("popup-ref-preco").textContent = p.ref ? "Ref: " + p.ref : "";
+        modalEl.setAttribute("aria-label", p.titulo);
+
+        document.getElementById("popup-img-principal").src = p.imagemPrincipal;
+        document.getElementById("popup-img-principal").alt = p.titulo;
+
+        // Miniaturas
+        const miniaturasEl = document.getElementById("popup-miniaturas");
+        miniaturasEl.innerHTML = "";
+        const unique = [p.imagemPrincipal, ...p.miniaturas];
+        const seen = new Set();
+        const miniaturasList = unique.filter(function (src) {
+          if (seen.has(src)) return false;
+          seen.add(src);
+          return true;
+        });
+
+        miniaturasList.forEach(function (src) {
+          const btnMin = document.createElement("button");
+          btnMin.type = "button";
+          btnMin.className = "popup-miniatura" + (src === imagemAtiva ? " ativa" : "");
+          btnMin.setAttribute("aria-label", "Trocar imagem");
+          btnMin.addEventListener("click", function () {
+            setImagemAtiva(src);
+          });
+          const imgMin = document.createElement("img");
+          imgMin.src = src;
+          imgMin.alt = "Miniatura";
+          imgMin.loading = "lazy";
+          imgMin.decoding = "async";
+          btnMin.appendChild(imgMin);
+          miniaturasEl.appendChild(btnMin);
+        });
+
+        // Video
+        const videoWrapper = document.getElementById("popup-video-wrapper");
+        const videoIframe = document.getElementById("popup-video-iframe");
+        if (p.video) {
+          videoIframe.src = p.video;
+          videoIframe.title = "Video - " + p.titulo;
+          videoWrapper.style.display = "";
+        } else {
+          videoIframe.src = "";
+          videoWrapper.style.display = "none";
+        }
+
+        // Precos
+        document.getElementById("popup-preco").textContent = p.preco;
+
+
+        // Descricao
+
+        // Beneficios
+        const beneficiosWrapper = document.getElementById("popup-beneficios-wrapper");
+        const beneficiosLista = document.getElementById("popup-beneficios-lista");
+        beneficiosLista.textContent = p.descricao || "";
+        beneficiosWrapper.style.display = "";
+
+        // Link de compra
+        document.getElementById("popup-link-compra").setAttribute("data-link", p.linkCompra);
+
+        // Exibe overlay com animação
+        overlayEl.classList.remove("hidden");
+
+        // Re-dispara animação do modal clonando o elemento
+        modalEl.style.animation = "none";
+        modalEl.offsetHeight; // reflow
+        modalEl.style.animation = "";
+
+        // Trava scroll
+        document.documentElement.style.overflow = "hidden";
+
+        // Foco no botão fechar
+        setTimeout(function () {
+          fecharBtn.focus();
+        }, 0);
+      }
+
+      // ---- FECHA O POPUP ----
+      function fecharPopup() {
+        if (produtoAbertoId === null) return;
+        produtoAbertoId = null;
+        imagemAtiva = null;
+
+        // Para o video ao fechar
+        const videoIframe = document.getElementById("popup-video-iframe");
+        videoIframe.src = "";
+
+        overlayEl.classList.add("hidden");
+        document.documentElement.style.overflow = "";
+      }
+
+      // ---- TROCA IMAGEM ATIVA ----
+      function setImagemAtiva(src) {
+        imagemAtiva = src;
+        document.getElementById("popup-img-principal").src = src;
+        // Atualiza classe ativa nas miniaturas
+        const btns = document.querySelectorAll(".popup-miniatura");
+        btns.forEach(function (btn) {
+          const img = btn.querySelector("img");
+          if (img && img.src === src) {
+            btn.classList.add("ativa");
+          } else {
+            btn.classList.remove("ativa");
+          }
+        });
+      }
+
+      // ---- EVENTOS ----
+
+      // Fechar clicando no overlay (fora do modal)
+      overlayEl.addEventListener("mousedown", function (e) {
+        if (e.target === overlayEl) {
+          fecharPopup();
+        }
+      });
+
+      // Botão fechar
+      fecharBtn.addEventListener("click", fecharPopup);
+
+      // Tecla Escape
+      window.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && produtoAbertoId !== null) {
+          fecharPopup();
+        }
+      });
+
+      // Disponibiliza função globalmente (como no React original)
+      window.abrirPopup = abrirPopup;
+
+      // ---- ABRE LINK DE COMPRA ----
+      function abrirLinkCompra() {
+        const btn = document.getElementById("popup-link-compra");
+        const url = btn.getAttribute("data-link") || "#";
+        window.open(url, "_blank", "toolbar=yes, location=yes, directories=no, status=no, menubar=yes, scrollbars=yes, resizable=no, copyhistory=yes, width=800, height=800");
+      }
+
+      // ---- INICIALIZA ----
+      renderCatalogo();
+    </script>
+  </body>
+</html>
